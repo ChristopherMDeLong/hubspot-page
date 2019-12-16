@@ -5,7 +5,7 @@ const Intro = props => {
     <div>
       <h2>Easy to build. </h2>
       <h4>Even easier to love.</h4>
-      <p>Welcome to your shiny new landing page. Use this text to highlight the benefits of your most alluring offer. Customize the headline and image to your heart's content. </p>
+      <p>Welcome to this shiny new landing page. Use this text to highlight the benefits of your most alluring offer. Customize the headline and image to your heart's content. </p>
 
       <p>And use a list to:</p>
         <ul>

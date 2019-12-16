@@ -10,20 +10,21 @@ class Signup extends Component {
       email: '',
       company: '',
       productOptions: ['sales hub', 'marketing hub', 'service hub'],
-      productSelected: '',
+      product: '',
       errors: {}
     }
     this.handleProductSelection = this.handleProductSelection.bind(this);
     this.handleClearForm = this.handleClearForm.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.validateNameChange = this.validateNameChange.bind(this);
     this.validateEmailChange = this.validateEmailChange.bind(this);
   }
 
   handleProductSelection(event) {
-    this.setState({ productSelected: event.target.value })
+    this.setState({ product: event.target.value })
   }
 
   handleClearForm(event) {
@@ -32,7 +33,7 @@ class Signup extends Component {
       name: '',
       email: '',
       company: '',
-      productSelected: ''
+      product: ''
     })
   }
 
@@ -46,12 +47,35 @@ class Signup extends Component {
         name: this.state.name,
         email: this.state.email,
         company: this.state.company,
-        productSelected: this.state.productSelected
+        product: this.state.product
         };
-        this.props.trackConsumption(formPayload);
-        this.handleClearForm(event);
+    this.addContact(formPayload)
+    this.setState({name: '', email: '', company: '', product: ''})
+  }
+}
+
+    addContact(formPayload) {
+      fetch("/api/v1/contacts", {
+        credentials: "same-origin",
+        method: "POST",
+        body: JSON.stringify(formPayload),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+    .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        let errorMessage = `${response.status} (${response.statusText})`,
+          error = new Error(errorMessage)
+        throw error
       }
-    }
+    })
+    .then(response=> response.json())
+    .catch(error => console.error(`Error in fetch: ${error.message}`))
+  }
 
     handleNameChange(event) {
       this.validateNameChange(event.target.value)
@@ -105,32 +129,35 @@ class Signup extends Component {
     <div>
       <form className="form" onSubmit={this.handleFormSubmit}>
         {errorDiv}
-          <label>Name</label>
           <TextField
+            label="Name"
             type="text"
             name="name"
+            content={this.state.name}
             handlerFunction={this.handleNameChange}
           />
-          <label>Email</label>
           <TextField
+            label="Email"
             type="text"
             name="email"
+            content={this.state.email}
             handlerFunction={this.handleEmailChange}
           />
-          <label>Company</label>
           <TextField
+            label="Company"
             type="text"
             name="company"
+            content={this.state.company}
             handlerFunction={this.handleCompanyChange}
           />
-          <label>Product Selected</label>
           <Product
+            label="Product"
             name="product"
             options={this.state.productOptions}
-            selectedOption={this.state.productSelected}
+            selectedOption={this.state.product}
             handlerFunction={this.handleProductSelection}
           />
-          <button>Sign Up</button>
+          <button className="button">Sign Up</button>
       </form>
     </div>
   )

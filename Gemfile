@@ -53,3 +53,5 @@ gem 'shoulda-matchers', group: [:development, :test], require: false
 gem 'devise'
 gem 'foundation-rails', '~> 6.5'
 gem 'webpacker', '~> 3.3'
+gem 'http', '~> 3.0'
+gem 'rb-readline', '~> 0.5.3'
